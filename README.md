@@ -16,6 +16,7 @@ In this GitHub repository, you will find a comprehensive collection of code, imp
 - python
 - networkx
 - opencv-python
+- scipy
 
 ## Results
 
