@@ -75,8 +75,8 @@ class Kalman_Filter_Tracker:
         """
 
         """Process the 'Max Weight Matching' algorithm or the 'Hungarian' algorithm for matching."""
-        match_dict = hungarian_algorithm(state_list, obs_list)
-        # match_dict = max_weight_matching(state_list, obs_list)
+        # match_dict = hungarian_algorithm(state_list, obs_list)
+        match_dict = max_weight_matching(state_list, obs_list)
     ## -----------------------------------------------------------------------------------------
     ## -----------------------------------------------------------------------------------------
         """Documentation."""

@@ -10,13 +10,14 @@ There are two reasons not to directly link the observations from frame to frame.
 ## -----------------------------------------------------------------------------------------
 ## -----------------------------------------------------------------------------------------
 """Define the system model."""
+# Assume that the target object is moving in a straight line with a uniform velocity.
 # System matrix.
-A = np.array([[1, 0, 0, 0, const.DELTA_T, 0            ],  # center pixel x coordinate
-              [0, 1, 0, 0, 0,             const.DELTA_T],  # center pixel y coordinate
-              [0, 0, 1, 0, 0,             0            ],  # box width
-              [0, 0, 0, 1, 0,             0            ],  # box height
-              [0, 0, 0, 0, 1,             0            ],  # center pixel x velocity
-              [0, 0, 0, 0, 0,             1            ]]) # center pixel y velocity
+A = np.array([[1, 0, 0, 0, const.DELTA_T, 0            ],  # Bounding box center pixel x coordinate.
+              [0, 1, 0, 0, 0,             const.DELTA_T],  # Bounding box center pixel y coordinate.
+              [0, 0, 1, 0, 0,             0            ],  # Bounding box width.
+              [0, 0, 0, 1, 0,             0            ],  # Bounding box height.
+              [0, 0, 0, 0, 1,             0            ],  # Bounding box center pixel x velocity.
+              [0, 0, 0, 0, 0,             1            ]]) # Bounding box center pixel y velocity.
 
 # Control matrix.
 B = None
