@@ -14,7 +14,7 @@ In this GitHub repository, you will find a comprehensive collection of code, imp
 
 ## Requirements
 - python
-- network
+- networkx
 - opencv-python
 
 ## Results
