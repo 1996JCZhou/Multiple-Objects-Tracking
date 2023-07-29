@@ -12,12 +12,13 @@ There are two reasons not to directly link the observations from frame to frame.
 """Define the system model."""
 # Assume that the target object is moving in a straight line with a uniform velocity.
 # System matrix.
-A = np.array([[1, 0, 0, 0, const.DELTA_T, 0            ],  # Bounding box center pixel x coordinate.
-              [0, 1, 0, 0, 0,             const.DELTA_T],  # Bounding box center pixel y coordinate.
-              [0, 0, 1, 0, 0,             0            ],  # Bounding box width.
-              [0, 0, 0, 1, 0,             0            ],  # Bounding box height.
-              [0, 0, 0, 0, 1,             0            ],  # Bounding box center pixel x velocity.
-              [0, 0, 0, 0, 0,             1            ]]) # Bounding box center pixel y velocity.
+# DELTA_T: The time intervall (s) between two adjacent video frames. 
+A = np.array([[1, 0, 0, 0, const.DELTA_T, 0            ],  # Bounding box center pixel x coordinate, Xt+1 = Xt + Vx,t * DELTA_T.
+              [0, 1, 0, 0, 0,             const.DELTA_T],  # Bounding box center pixel y coordinate, Yt+1 = Yt + Vy,t * DELTA_T.
+              [0, 0, 1, 0, 0,             0            ],  # Bounding box width                    , Ht+1 = Ht.
+              [0, 0, 0, 1, 0,             0            ],  # Bounding box height                   , Wt+1 = Wt.
+              [0, 0, 0, 0, 1,             0            ],  # Bounding box center pixel x velocity  , Vx,t+1 = Vx,t.
+              [0, 0, 0, 0, 0,             1            ]]) # Bounding box center pixel y velocity  , Vy,t+1 = Vy,t.
 
 # Control matrix.
 B = None
@@ -36,7 +37,7 @@ Q = np.eye(6) * 0.1
 
 # Measurement noise covariance matrix.
 # Although the results from the detector are realible, they are still noisy.
-R = np.eye(6)
+R = np.eye(6) * 0.1
 
 """Initialize the covariance matrix of the A-posteriori-Density.
    (If unknown, then asign it towards infinity.)"""
@@ -79,18 +80,17 @@ def main():
         out = cv2.VideoWriter(save_path, fourcc, const.FPS_OUT, sz, isColor=True)
 ## -----------------------------------------------------------------------------------------
 ## -----------------------------------------------------------------------------------------
-    """Initialize a list to save Kalman-Filter (KF) instances
+    """Initialize a list to save kalman filter instances
        for each target appearing in each video frame."""
     kalman_list = [] 
 
     """Count the video frames for display."""
     frame_count = 1
 
-    """Load all the detected BB positions (1D numpy array; "xyxy") for video frame,
-       starting from the first video frame to the last video frame."""
+    """Load all the detected BB positions (1D numpy array; "xyxy") for each video frame."""
     for obs_list_frame in obs_list_all_frames:
 
-        """Load the corresponding video frame for display."""
+        """Load the each video frame for display."""
         ret, frame = cap.read()
 
         if not ret:
@@ -111,16 +111,14 @@ def main():
             kalman.predict()              # Process the prediction step in the current video frame.
             state = kalman.X_prior        # Expected value vector of the A-prior-Density in the current video frame.
             state_list.append(state[0:4]) # Predicted BB position (2D numpy array; "xywh") extracted from the state.
-    ## -----------------------------------------------------------------------------------------
-    ## -----------------------------------------------------------------------------------------
+
         """Load all the detected BB positions in the current video frame.
            Transform them from 1D numpy arrays ("xyxy") into 2D numpy arrays ("xywh")."""
         # 'obs_list': A list of each detected BB position (2D numpy array; "xywh")
         #             in the current video frame.
         #             [2D numpy array ("xywh"), 2D numpy array ("xywh"), ...]
         obs_list = [utils.xyxy_to_xywh(obs) for obs in obs_list_frame]
-    ## -----------------------------------------------------------------------------------------
-    ## -----------------------------------------------------------------------------------------
+
         """Matching between predicted and detected BB positions in the current video frame
            to get a list of unmatched states and observations and matched pairs."""
         state_unmatched_list, obs_unmatched_list, matched_pairs, matched_list = Kalman_Filter_Tracker.Matching(state_list, obs_list)
@@ -144,7 +142,7 @@ def main():
                      als preparation for the next video frame.
                 """
                 kalman_list[matched_pair[0]].update(obs_list[matched_pair[1]])
-    ## -----------------------------------------------------------------------------------------
+
         """To deal with unmatched states (e.g. occluded targets)."""
         state_del = []
         for idx in state_unmatched_list:
@@ -171,7 +169,7 @@ def main():
 
         """Update the list for all the instantiated kalman filters."""
         kalman_list = [kalman_list[i] for i in range(len(kalman_list)) if i not in state_del]
-    ## -----------------------------------------------------------------------------------------
+
         """To deal with unmatched detections."""
         """For each unmatched detection
            (e.g. new appearing target / target moving fast between adjacent video frames):
@@ -192,8 +190,8 @@ def main():
                         1)                                              # Thickness of the text.
 
             kalman_list.append(Kalman_Filter_Tracker(A, B, C, L, Q, R, utils.xywh_to_state(obs_list[idx]), P))
-## -----------------------------------------------------------------------------------------
-## -----------------------------------------------------------------------------------------
+    ## -----------------------------------------------------------------------------------------
+    ## -----------------------------------------------------------------------------------------
         """"Visualisation"""
         """Display all the detected BB in the current video frame (Green)."""
         for obs in obs_list_frame:
@@ -205,8 +203,10 @@ def main():
             cv2.rectangle(frame, tuple(pos[:2]), tuple(pos[2:]), const.RED, 1, cv2.LINE_AA)
 
         """Display the matched pairs (White)."""
+        # A matched pair consists of a predicted BB position and a detected BB position in the current video frame.
         for item in matched_list:
             cv2.line(frame, tuple(item[0][:2]), tuple(item[1][:2]), const.WHITE, 3, cv2.LINE_AA)
+        # In the first video frame, there is no matched pair (white).
 
         """Display the trace of each kalman filter instance."""
         for kalman in kalman_list:

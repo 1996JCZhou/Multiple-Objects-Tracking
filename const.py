@@ -6,6 +6,14 @@ VIDEO_PATH                   = "D:\\Object Detection\\MOT\\data\\testvideo.mp4"
 VIDEO_OUTPUT_PATH_HUNGARIAN  = "D:\\Object Detection\\MOT\\data\\Kalman_Filter_MOT_Hungarian.avi"
 VIDEO_OUTPUT_PATH_MAX_WEIGHT = "D:\\Object Detection\\MOT\\data\\Kalman_Filter_MOT_Max_Weight.avi"
 
+"""Define the time intervall (ms) to display video frames."""
+TIME_INTERVALL = 100
+
+"""Color for display."""
+GREEN = (0,   255, 0)
+RED   = (0,   0,   255)
+WHITE = (255, 255, 255)
+
 """Save the edited video frames as a video file."""
 SAVE_VIDEO = True
 
@@ -13,28 +21,19 @@ SAVE_VIDEO = True
 FPS_OUT = 10
 
 """Define the threshold for minimal IOU value."""
-IOU_MIN = 0.3
+IOU_MIN = 0.4
 
-"""Define the tracking termination frame number"""
+"""Define the tracking termination frame number for unmatched states."""
 TERMINATE_FRAME = 5
 
-"""Calculate the time intervall (ms) between two adjacent video frames.
-   The variable 'DELTA_T' is the reciprocal of the video FPS value."""
+"""Calculate the time intervall (s) between two adjacent video frames."""
+video = cv2.VideoCapture(VIDEO_PATH) # Load the video.
 
-video = cv2.VideoCapture(VIDEO_PATH)
-
-fps = video.get(cv2.CAP_PROP_FPS)
+fps = video.get(cv2.CAP_PROP_FPS) # Calculate the FPS (Frames Per Second) of the video.
 print("Frames per second: {}".format(fps))
 
-frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
-print("Total number of video frames: {}".format(frame_count))
-
+# The variable 'DELTA_T' is the reciprocal of the video FPS value.
 DELTA_T = 1 / fps
 
-"""Color for display."""
-GREEN = (0,   255, 0)
-RED   = (0,   0,   255)
-WHITE = (255, 255, 255)
-
-"""Define the time intervall (ms) to display video frames."""
-TIME_INTERVALL = 100
+# frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+# print("Total number of video frames: {}".format(frame_count))

@@ -18,7 +18,7 @@ def max_weight_matching(state_list, obs_list):
     """
 
     """Create a bipartite graph for the 'Max Weight Matching' Process."""
-    # By definition, a Graph is a collection of nodes (vertices) along with identified pairs of nodes (called edges).
+    # By definition, a Graph is a collection of nodes (vertices) along with identified pairs of nodes (edges).
     graph = nx.Graph() # Create an empty graph with no nodes and no edges.
 
     for i, state in enumerate(state_list):
@@ -66,7 +66,7 @@ def hungarian_algorithm(state_list, obs_list):
     for i, state in enumerate(state_list):
         for j, obs in enumerate(obs_list):
             iou_dist = cal_iou(state, obs)
-            if iou_dist >= const.IOU_MIN:
+            if iou_dist >= const.IOU_MIN: # Exclude the case when the edge score is below a predefined value.
                 iou_matrix[i, j] = iou_dist
     cost_matrix = - iou_matrix
     row_ind, col_ind = linear_sum_assignment(cost_matrix)
