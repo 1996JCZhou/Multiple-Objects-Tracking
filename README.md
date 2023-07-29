@@ -19,7 +19,7 @@ In this GitHub repository, you will find a comprehensive collection of code, imp
 - scipy
 
 ## Results
-![image]([https://github.com/1996JCZhou/Multiple-Objects-Tracking/blob/master/data/snap shot.JPG])
+![image]([https://github.com/1996JCZhou/Multiple-Objects-Tracking/blob/master/data/Snap_Shot.PNG])
 
 Please see the videos on Youtube.
 https://www.youtube.com/watch?v=TjlJh2Vyx04
