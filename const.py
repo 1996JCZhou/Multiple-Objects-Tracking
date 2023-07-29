@@ -1,3 +1,5 @@
+import cv2
+
 """Define file paths."""
 FILE_DIR                     = "D:\\Object Detection\\MOT\\data\\labels"
 VIDEO_PATH                   = "D:\\Object Detection\\MOT\\data\\testvideo.mp4"
@@ -8,7 +10,7 @@ VIDEO_OUTPUT_PATH_MAX_WEIGHT = "D:\\Object Detection\\MOT\\data\\Kalman_Filter_M
 SAVE_VIDEO = True
 
 """Define the output video's displaying speed."""
-FPS = 10
+FPS_OUT = 10
 
 """Define the threshold for minimal IOU value."""
 IOU_MIN = 0.3
@@ -16,8 +18,18 @@ IOU_MIN = 0.3
 """Define the tracking termination frame number"""
 TERMINATE_FRAME = 5
 
-"""Define the time intervall (ms) between two adjacent video frames."""
-DELTA_T = 0.1
+"""Calculate the time intervall (ms) between two adjacent video frames.
+   The variable 'DELTA_T' is the reciprocal of the video FPS value."""
+
+video = cv2.VideoCapture(VIDEO_PATH)
+
+fps = video.get(cv2.CAP_PROP_FPS)
+print("Frames per second: {}".format(fps))
+
+frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+print("Total number of video frames: {}".format(frame_count))
+
+DELTA_T = 1 / fps
 
 """Color for display."""
 GREEN = (0,   255, 0)

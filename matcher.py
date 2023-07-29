@@ -25,7 +25,7 @@ def max_weight_matching(state_list, obs_list):
         state_node = 'state_%d' % i
         graph.add_node(state_node, bipartite=0)
         # Use a node attribute named bipartite with values 0 or 1
-        # to identify the sets each node belongs to.
+        # to identify the node set each node belongs to.
 
         for j, obs in enumerate(obs_list):
             obs_node = 'obs_%d' % j
@@ -33,7 +33,7 @@ def max_weight_matching(state_list, obs_list):
 
             """Calculate the IoU between two bounding boxes as edge weight."""
             score = cal_iou(state, obs)
-            if score >= const.IOU_MIN: # Exclude the case when the edge score is zero.
+            if score >= const.IOU_MIN: # Exclude the case when the edge score is below a predefined value.
                 graph.add_edge(state_node, obs_node, weight=score)
 
     """Compute a maximum weighted matching of the bipartite graph."""
