@@ -7,7 +7,8 @@ from kalman  import Kalman_Filter_Tracker
 There are two reasons not to directly link the observations from frame to frame.
 1. There will be no detected bounding box when the target is occluded.
 2. The observations are still noisy even from good detecotr."""
-
+## -----------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------
 """Define the system model."""
 # System matrix.
 A = np.array([[1, 0, 0, 0, const.DELTA_T, 0            ],  # center pixel x coordinate
@@ -37,44 +38,48 @@ Q = np.eye(6) * 0.1
 R = np.eye(6)
 
 """Define the covariance matrix of the A-posteriori-Density
-   for the time step 0. (unknown, then asigned towards infinity)"""
+   for the time step 0. (if unknown, then asigned towards infinity)"""
 P = np.eye(6) * 2000
+## -----------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------
 
 
 def main():
 ## -----------------------------------------------------------------------------------------
 ## -----------------------------------------------------------------------------------------
-    """Load video and detected BB positions for each video frame."""
+    """Load video and all the detected Bounding Box (BB) positions in each video frame."""
     assert os.path.exists(const.VIDEO_PATH), "Path for video does not exist."
     cap = cv2.VideoCapture(const.VIDEO_PATH)
 
     assert os.path.exists(const.FILE_DIR), "Path for labels does not exist."
     obs_list_all_frames = measure.load_observations(const.FILE_DIR)
     # 'obs_list_all_frames': A list of elements.
-    # Every element of this list is also a list corresponding to a video frame.
-    # This list consists of all the detected bounding box positions in each video frame.
+    # Every element in this list is also a list corresponding to a single video frame.
+    # This list consists of all the detected BB positions in each video frame.
     # Each BB position is described as an 1D numpy array ("xyxy").
-
-    """Save the edited video frames as a video file."""
+## -----------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------
+    """Aggregate edited video frames into a new video."""
     if const.SAVE_VIDEO:
 
         """Define the video encoder."""
-        # Encoding video or audio into a specific file format
-        # according to the encoding format requires an encoder 'fourcc'.
+        # Encode video or audio into a specific file format
+        # according to the encoding format using an encoder 'fourcc'.
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
 
+        """Define the size of the new video."""
         sz = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
               int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
+        """Define a path to save the new video."""
         assert os.path.exists(const.VIDEO_OUTPUT_PATH_MAX_WEIGHT), "Path to save video does not exist."
         save_path = const.VIDEO_OUTPUT_PATH_MAX_WEIGHT
 
-        """Make a video using edited video frames."""
         out = cv2.VideoWriter(save_path, fourcc, const.FPS, sz, isColor=True)
 ## -----------------------------------------------------------------------------------------
 ## -----------------------------------------------------------------------------------------
-    """Initialize a list of kalman filter instances
-       for the appeared target in the video frame."""
+    """Initialize a list to save Kalman-Filter (KF) instances
+       for each target appearing in each video frame."""
     kalman_list = [] 
 
     """Load all the detected BB positions (1D numpy array; "xyxy")
