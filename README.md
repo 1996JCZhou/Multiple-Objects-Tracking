@@ -21,8 +21,8 @@ In this GitHub repository, you will find a comprehensive collection of code, imp
 ## Results
 ![image](https://github.com/1996JCZhou/Multiple-Objects-Tracking/blob/master/data/Snap_Shot.PNG)
 
-Please see the videos on Youtube.
-https://www.youtube.com/watch?v=TjlJh2Vyx04
+Welcome to see my videos in my Youtube channel for this project.
+https://www.youtube.com/watch?v=TjlJh2Vyx04 and
 https://www.youtube.com/watch?v=GMeyCBeQo3A
 
 
