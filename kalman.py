@@ -3,7 +3,7 @@ import numpy as np
 from matcher import max_weight_matching, hungarian_algorithm
 
 
-class Kalman_Filter_Tracker:
+class Kalman_Filter_MOT:
     def __init__(self, A, B, C, L, Q, R, X, P):
 
         """Define the system model."""

@@ -1,7 +1,7 @@
 import cv2, const, utils, measure, os
 import numpy as np
 from time    import time
-from kalman  import Kalman_Filter_Tracker
+from kalman  import Kalman_Filter_MOT
 
 """Preparation for the Kalman Filter.
 There are two reasons not to directly link the observations from frame to frame.
@@ -121,7 +121,7 @@ def main():
 
         """Matching between predicted and detected BB positions in the current video frame
            to get a list of unmatched states and observations and matched pairs."""
-        state_unmatched_list, obs_unmatched_list, matched_pairs, matched_list = Kalman_Filter_Tracker.Matching(state_list, obs_list)
+        state_unmatched_list, obs_unmatched_list, matched_pairs, matched_list = Kalman_Filter_MOT.Matching(state_list, obs_list)
     ## -----------------------------------------------------------------------------------------
     ## -----------------------------------------------------------------------------------------
         """To deal with matched pairs."""
@@ -189,7 +189,7 @@ def main():
                         (0, 0, 255),                                    # Red text.
                         1)                                              # Thickness of the text.
 
-            kalman_list.append(Kalman_Filter_Tracker(A, B, C, L, Q, R, utils.xywh_to_state(obs_list[idx]), P))
+            kalman_list.append(Kalman_Filter_MOT(A, B, C, L, Q, R, utils.xywh_to_state(obs_list[idx]), P))
     ## -----------------------------------------------------------------------------------------
     ## -----------------------------------------------------------------------------------------
         """"Visualisation"""
