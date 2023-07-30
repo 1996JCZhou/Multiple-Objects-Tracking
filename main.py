@@ -55,6 +55,7 @@ def main():
 
     assert os.path.exists(const.FILE_DIR), "Path for labels does not exist."
     obs_list_all_frames = measure.load_observations(const.FILE_DIR)
+
     # 'obs_list_all_frames': A list of elements.
     # Every element in this list is also a list corresponding to a single video frame.
     # This list consists of all the detected BB positions in each video frame.
@@ -129,20 +130,21 @@ def main():
             for matched_pair in matched_pairs:
 
                 """Key component for tracking:
-                   Matching between predicted and detected BB positions in the current video frame."""
-                """
-                In the current video frame:
-                (The detected BB 'obs_list[matched_pair[1]]') matches
-                (the predicted BB from the kalman filter instance 'kalman_list[matched_pair[0]]'
-                 after the prediction step).
-                -->> This detected BB 'obs_list[matched_pair[1]]'
-                     is determined to be an observation for the current video frame.
-                -->> Process the filter step of the kalman filter instance
-                     using this determined observation to calculate the filtered result
-                     als preparation for the next video frame.
+                   Matching between predicted and detected BB positions in the current video frame.
+
+                   In the current video frame:
+                   (The detected BB 'obs_list[matched_pair[1]]') matches
+                   (the predicted BB from the kalman filter instance 'kalman_list[matched_pair[0]]'
+                   after the prediction step).
+
+                   -->> This detected BB 'obs_list[matched_pair[1]]'
+                        is determined to be an observation for the current video frame.
+                   -->> Process the filter step of the kalman filter instance
+                        using this determined observation to calculate the filtered result
+                        als preparation for the next video frame.
                 """
                 kalman_list[matched_pair[0]].update(obs_list[matched_pair[1]])
-
+    ## -----------------------------------------------------------------------------------------
         """To deal with unmatched states (e.g. occluded targets)."""
         state_del = []
         for idx in state_unmatched_list:
@@ -169,7 +171,7 @@ def main():
 
         """Update the list for all the instantiated kalman filters."""
         kalman_list = [kalman_list[i] for i in range(len(kalman_list)) if i not in state_del]
-
+    ## -----------------------------------------------------------------------------------------
         """To deal with unmatched detections."""
         """For each unmatched detection
            (e.g. new appearing target / target moving fast between adjacent video frames):
