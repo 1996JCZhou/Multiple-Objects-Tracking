@@ -22,7 +22,7 @@ In this GitHub repository, you will find a comprehensive collection of code, imp
 ![image](https://github.com/1996JCZhou/Multiple-Objects-Tracking/blob/master/data/Snap_Shot.PNG)
 
 Welcome to see my videos in my Youtube channel for this project.
+
 https://www.youtube.com/watch?v=TjlJh2Vyx04 and
-https://www.youtube.com/watch?v=GMeyCBeQo3A
 
-
+https://www.youtube.com/watch?v=GMeyCBeQo3A.
