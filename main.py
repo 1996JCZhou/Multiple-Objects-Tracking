@@ -7,8 +7,7 @@ from kalman  import Kalman_Filter_MOT
 There are two reasons not to directly link the observations from frame to frame.
 1. There will be no detected bounding box when the target is occluded.
 2. The observations are still noisy even from a good detector."""
-## -----------------------------------------------------------------------------------------
-## -----------------------------------------------------------------------------------------
+
 """Define the system model."""
 # Assume that the target object is moving in a straight line with a uniform velocity.
 # System matrix.
@@ -42,8 +41,6 @@ R = np.eye(6) * 0.1
 """Initialize the covariance matrix of the A-posteriori-Density.
    (If unknown, then asign it towards infinity.)"""
 P = np.eye(6) * 2000
-## -----------------------------------------------------------------------------------------
-## -----------------------------------------------------------------------------------------
 
 
 def main():
