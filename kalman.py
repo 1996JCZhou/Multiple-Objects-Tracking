@@ -124,7 +124,7 @@ class Kalman_Filter_MOT:
 
             """Update the observation for the current time step."""
             self.Z[ :4] = obs
-            
+
             """Calculate the center pixel velocity using the observation for the current video frame and
                the expected value vector of the A-posteriori-Density for the previous video frame / best estimation."""
             # 'X_posteriori': Expected value vector of the A-posteriori-density for the previous video frame.
